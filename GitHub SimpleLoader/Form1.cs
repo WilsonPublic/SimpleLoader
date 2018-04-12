@@ -59,6 +59,11 @@ namespace WindowsFormsApp2
                 //Injection, just leave this alone if you are a beginner
                 var injector = new ManualMapInjector(target) { AsyncInjection = true };
                 label2.Text = $"hmodule = 0x{injector.Inject(file).ToInt64():x8}";
+                
+                if (System.IO.File.Exists(mainpath)) //Checking if the DLL exists
+                {
+                    System.IO.File.Delete(mainpath); //Deleting the DLL
+                }
             }
             else
             {
