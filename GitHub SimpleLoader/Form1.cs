@@ -23,6 +23,17 @@ namespace WindowsFormsApp2
         public Form1()
         {
             InitializeComponent();
+            try
+            {
+                foreach (Process proc in Process.GetProcessesByName("steam"))
+                {
+                    proc.Kill();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         string HWID;
@@ -33,10 +44,13 @@ namespace WindowsFormsApp2
             textBox1.Text = HWID;
             textBox1.ReadOnly = true;
             checkonline();
+            
+            MessageBox.Show("Steam has now been closed for security purposes.\nAfter Steam has closed, open it again, open CSGO and inject the cheat.");
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("Injection thread has started.\nRemember to close the loader after the cheat has been injected succesfully.");
             checkonline();
             WebClient wb = new WebClient();
             string HWIDLIST = wb.DownloadString("HWID List URL"); //Replace "HWID List URL" with your own URL to a RAW text (txt) file with all your wanted HWIDs [Example: http://myurl.com/HWID.txt]
@@ -99,6 +113,7 @@ namespace WindowsFormsApp2
             Clipboard.SetText(HWID);
             button2.Enabled = false;
             button2.Text = "Copied";
+            MessageBox.Show("Send your HWID to NAMEHERE so you can be whitelisted.");
         }
     }
 }
