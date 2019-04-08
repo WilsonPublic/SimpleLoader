@@ -15,6 +15,7 @@ using ManualMapInjection.Injection;
 using System.Net;
 using System.IO;
 using System.Diagnostics;
+using System.Net.NetworkInformation;
 
 namespace WindowsFormsApp2
 {
@@ -73,23 +74,25 @@ namespace WindowsFormsApp2
 
         private void checkonline()
         {
-            //Checking if the user can get a response from "https://google.com/"
+            //Checking if the user can get a response from googles dns server
             try
             {
-                using (var client = new WebClient())
+                //less retarded way of checking for a network connection
+                string ip = "8.8.8.8";
+                Ping ping = new Ping();
+                PingReply reply = ping.Send(ip);
+
+                if (reply.Status == IPStatus.Success)
                 {
-                    using (client.OpenRead("https://google.com/"))
-                    {
-                        label1.ForeColor = Color.Green;
-                        label1.Text = ("Online");
-                    }
+                    label1.ForeColor = Color.Green;
+                    label1.Text = ("Online");
                 }
             }
+            //catch errors and spit out a simple messagebox
             catch
             {
-                //If it does not get a response (This means the user is offline or google is down for some reason) it will Exit the application, you can stop this by removing "Application.Exit();"
-                label1.ForeColor = Color.Red;
-                label1.Text = ("Offline");
+                //what was the point of setting your label to offline if you are just going to exit the app?
+                MessageBox.Show("Could not find a network connection!", "Error", MessageBoxButtons.OK);
                 Application.Exit();
             }
         }
